@@ -1,36 +1,34 @@
 #include "main.h"
-
-
 /**
- * get_flag - turns on flags if _printf finds
- * @s: character holding the flag
- * @f: pointer to the struct flags where flag is
+ * get_flags - Calculates active flags
+ * @format: Formatted string  which to print arguments
  *
- * Return: 1 if a flag turned on, 0 otherwise
+ * @n: take  parameter.
+ *
+ * Return: Flags:
  */
-int get_flag(char s, flags_t *f)
+int get_flags(const char *format, int *n)
+
 {
-	int j = 0;
+/* - + 0 # ' ' */
+/* 1 2 4 8  16 */
+int j, curr_n;
+int flags = 0;
 
+const char FLAGS_CH[] = {'-', '+', '0', '#', ' ', '\0'};
+const int FLAGS_ARR[] = {F_MINUS, F_PLUS, F_ZERO, F_HASH, F_SPACE, 0};
 
-	switch (s)
-
-	{
-	case '+':
-	f->plus = 1;
-	j = 1;
-	break;
-
-	case ' ':
-	f->space = 1;
-	j = 1;
-	break;
-
-	case '#':
-	f->hash = 1;
-	j = 1;
-	break;
-
-	}
-	return (j);
+for (curr_n = *n + 1; format[curr_n] != '\0'; curr_n++)
+{
+for (j = 0; FLAGS_CH[j] != '\0'; j++)
+if (format[curr_n] == FLAGS_CH[j])
+{
+flags |= FLAGS_ARR[j];
+break;
+}
+if (FLAGS_CH[j] == 0)
+break;
+}
+*n = curr_n - 1;
+return (flags);
 }
